@@ -44,6 +44,7 @@ class User {
 
     localStorage.setItem(this.email, JSON.stringify(this));
     alert("Успішна реєстрація");
+    window.location.href = "./index.html";
   }
 
   validate() {
@@ -57,7 +58,7 @@ class User {
     let tenYears = subtractYears(currentDate, 10);
     console.log(tenYears);
 
-    if (new Date(this.date) >= tenYears) {
+    if (new Date(document.getElementById("date").value) >= tenYears) {
       errors.push({
         inputElement: document.getElementById("date"),
         a: (document.getElementById("date").type = "text"),
@@ -135,13 +136,34 @@ form.addEventListener("submit", (event) => {
   user.register();
 });
 
-const loginBtn = document.getElementById("logIn_btn");
-loginBtn.addEventListener("click", () => {
-  alert("Увійшли успішно!");
-});
+// SingIn
+const formSingIn = document.querySelector(".formSingIn");
+const registerBtnItem = document.getElementById("registerBtn");
+const singInBtn = document.getElementById("singInBtn");
 
-const registerBtn = document.getElementById("register_Btn");
-registerBtn.addEventListener("click", () => {
-  form.style.display = "none";
-  loginForm.style.display = "block";
-});
+registerBtnItem.addEventListener("click", singIn);
+singInBtn.addEventListener("click", checkPassword);
+function singIn(register) {
+  form.classList.add("wrapperBlock");
+  formSingIn.style.display = "none";
+}
+//!*
+// const loginBtnItem = document.getElementById("submit_btn");
+loginBtnItem.addEventListener("click", checkPassword);
+// singInBtn.addEventListener("click", checkPassword);
+function checkPassword() {
+  const email = document.getElementById("emailSingIn").value;
+  const password = document.getElementById("passwordSingIn").value;
+
+  if (localStorage.getItem(email)) {
+    const user = JSON.parse(localStorage.getItem(email));
+
+    if (password === user.password) {
+      window.location.href = "./profile.html";
+    } else {
+      alert("Incorrect email or password");
+    }
+  } else {
+    alert("Користувача з такою електронною поштою не знайдено");
+  }
+}
